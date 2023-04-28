@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tile-based Game</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/controls/OrbitControls.js';
+
+        // Define the Tile class
+        class Tile {
+            constructor(color, height) {
+                this.color = color;
+                this.height = height;
+            }
+        }
+
+        // Variables
+        let camera, scene, renderer, controls;
+        let gridSizeX = 20;
+        let gridSizeY = 10;
+        // One tile is 15 feet across, 3 feet tall.
+        let tileSize = 3 * 15;
+        let tileHeight = 3 * 3;
+
+        // Initialization
+        init();
+        animate();
+
+        function init() {
+            // Create the camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.set(gridSizeX * tileSize / 2, gridSizeX * tileSize, gridSizeY * tileSize * 1.5);
+
+            // Create the scene
+            scene = new THREE.Scene();
+
+            // Generate the tile grid
+            const geometry = new THREE.BoxGeometry(tileSize, tileHeight, tileSize);
+            
+            for (let i = 0; i < gridSizeX; i++) {
+                for (let j = 0; j < gridSizeY; j++) {
+                    const color = new THREE.Color(Math.random(), Math.random(), Math.random());
+                    const material = new THREE.MeshBasicMaterial({ color: color });
+
+                    // Random height for the tile
+                    const height = 1 + Math.ceil(Math.random() * 3);
+
+                    // Stack the geometry according to the height
+                    for (let h = 0; h < height; h++) {
+                        const tile = new THREE.Mesh(geometry, material);
+                        tile.position.set(i * tileSize, h * tileHeight, j * tileSize);
+                        scene.add(tile);
+
+               			// Store the tile data
+            			const tileData = new Tile(color, height);
+                        tile.userData = { tileData: tileData };
+                    }
+                }
+            }
+
+            // Set up the renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Set up orbit controls
+            controls = new OrbitControls(camera, renderer.domElement);
+
+            // Add event listeners
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            // Update the color of the tiles
+            const time = Date.now() * 0.001;
+            const colorScale = 0.2;
+            const colorOffset = 0.5;
+
+            for (let i = 0; i < scene.children.length; i++) {
+                const child = scene.children[i];
+    
+                if (child.userData.tileData !== undefined) {
+                    const tileData = child.userData.tileData;
+                    const originalColor = tileData.color;
+                    const r = originalColor.r * (1 - colorScale) + colorScale * Math.sin(time + i * 0.1);
+                    const g = originalColor.g * (1 - colorScale) + colorScale * Math.sin(time + i * 0.2);
+                    const b = originalColor.b * (1 - colorScale) + colorScale * Math.sin(time + i * 0.3);
+                    child.material.color.setRGB(r, g, b);
+                }
+            }
+
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+</script>
+
