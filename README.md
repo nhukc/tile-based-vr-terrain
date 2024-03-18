@@ -2,7 +2,9 @@
 
 This project provides a foundational framework for a tile-based virtual reality (VR) game environment, featuring camera panning and dynamic terrain loading. It's designed to offer developers a starting point for creating immersive VR experiences with an emphasis on performance and interactivity.
 
-![Tile scrolling animation](tile-scrolling.gif)
+<p align="center">
+  <img src="tile-scrolling.gif" alt="Tile scrolling animation" />
+</p>
 
 ## Features
 
