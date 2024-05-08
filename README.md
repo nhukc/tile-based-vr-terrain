@@ -1,17 +1,10 @@
 # Tile-Based VR Game Environment
 
-This project provides a foundational framework for a tile-based virtual reality (VR) game environment, featuring camera panning and dynamic terrain loading. It's designed to offer developers a starting point for creating immersive VR experiences with an emphasis on performance and interactivity.
+This project provides a framework for a tile-based virtual reality environment, featuring camera panning and dynamic terrain loading.
 
 <p align="center">
   <img src="tile-scrolling.gif" alt="Tile scrolling animation" />
 </p>
-
-## Features
-
-- **Tile-Based Terrain**: Efficiently manages and renders terrain using a grid of tiles, allowing for expansive and detailed environments without compromising performance.
-- **Dynamic Camera Panning**: Implements camera controls for smooth panning and navigation through the game environment, enhancing the VR experience.
-- **Chunk Loading**: Utilizes a chunk-based loading system to dynamically load and unload terrain data, ensuring optimal resource use and smooth gameplay.
-- **Customizable Settings**: Offers configurable settings for terrain generation, camera behavior, and other key parameters, providing flexibility to adapt to various game designs.
 
 ## Getting Started
 
